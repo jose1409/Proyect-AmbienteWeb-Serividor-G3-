@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Sistema Académico</title>
+    <title>Grupos - Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="View/assets/css/estudiante.css">
-
+    <link rel="stylesheet" href="View/assets/css/grupo.css">
 </head>
 
 <body>
@@ -33,7 +32,7 @@
                 </a>
             </li>
             <li>
-                <a href="./estudiante.html" class="active">
+                <a href="./estudiante.html">
                     <i class="fas fa-user-graduate"></i>
                     Estudiantes
                 </a>
@@ -58,7 +57,7 @@
             </li>
 
             <li>
-                <a href="./institucion.html">
+                <a href="./institucion.html" class="active">
                     <i class="fa-regular fa-building"></i>
                     Institución
                 </a>
@@ -86,10 +85,10 @@
     <main class="main-content">
         <div class="content-wrapper">
             <div class="top-bar">
-                <h4 class="mb-0">Gestión de Estudiantes</h4>
+                <h4 class="mb-0">Gestión de Institución</h4>
                 <div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal">
-                        <i class="fas fa-plus"></i> Nuevo Estudiante
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#grupoModal">
+                        <i class="fas fa-plus"></i> Nueva Institución
                     </button>
                 </div>
             </div>
@@ -98,7 +97,7 @@
             <div class="search-box mb-4">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre o cédula...">
+                        <input type="text" class="form-control" placeholder="Buscar por nombre de institución...">
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary w-100">
@@ -108,19 +107,14 @@
                 </div>
             </div>
 
-            <!-- tabla de estudiante -->
+            <!-- tabla de instituciones -->
             <div class="table-container">
                 <div class="table-responsive">
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Cédula</th>
-                                <th>Nombre</th>
-                                <th>Segundo Nombre</th>
-                                <th>Primer Apellido</th>
-                                <th>Segundo Apellido</th>
-                                <th>Grupo</th>
+                                <th>Nombre de institución</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -128,12 +122,31 @@
                             <!-- la tabla se poblara segun la base de datos -->
                             <tr>
                                 <td>1</td>
-                                <td>123456789</td>
-                                <td>Laura</td>
-                                <td>María</td>
-                                <td>Azofeifa</td>
-                                <td>Jiménez</td>
-                                <td>Grupo 1</td>
+                                <td>Universidad de San Carlos</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Universidad Rafael Landívar</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Universidad Mariano Gálvez</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -154,45 +167,19 @@
         </footer>
     </main>
 
-    <!-- Student Modal -->
-    <div class="modal fade" id="studentModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+    <!-- Grupo Modal -->
+    <div class="modal fade" id="grupoModal" tabindex="-1">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Añadir Estudiante</h5>
+                    <h5 class="modal-title">Añadir institución</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="studentForm">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Cédula</label>
-                                <input type="text" class="form-control" id="cedula" name="cedula" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Segundo Nombre</label>
-                                <input type="text" class="form-control" id="segundo_nombre" name="segundo_nombre">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Primer Apellido</label>
-                                <input type="text" class="form-control" id="primer_apellido" name="primer_apellido" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Segundo Apellido</label>
-                                <input type="text" class="form-control" id="segundo_apellido" name="segundo_apellido">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Grupo</label>
-                                <input type="text" class="form-control" id="grupo" name="grupo" required>
-                            </div>
+                    <form id="grupoForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la institución</label>
+                            <input type="text" class="form-control" id="nombre_grupo" name="nombre_grupo" required>
                         </div>
                     </form>
                 </div>
@@ -207,4 +194,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html>
+</html
