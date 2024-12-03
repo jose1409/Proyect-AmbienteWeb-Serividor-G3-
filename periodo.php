@@ -12,110 +12,60 @@
 </head>
 
 <body>
-    <!-- menu lateral -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h4>Sistema Académico</h4>
-        </div>
-
-        <ul class="sidebar-menu">
-            <li>
-                <a href="./dashboard.html">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="./profesor.html">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    Profesores
-                </a>
-            </li>
-            <li>
-                <a href="./estudiante.html">
-                    <i class="fas fa-user-graduate"></i>
-                    Estudiantes
-                </a>
-            </li>
-            <li>
-                <a href="./grupo.html" class="active">
-                    <i class="fas fa-book"></i>
-                    Grupos
-                </a>
-            </li>
-            <li>
-                <a href="./asignatura.html">
-                    <i class="fas fa-layer-group"></i>
-                    Asignaturas
-                </a>
-            </li>
-            <li>
-                <a href="./calificacion.html">
-                    <i class="fas fa-star"></i>
-                    Calificaciones
-                </a>
-            </li>
-
-            <li>
-                <a href="./institucion.html">
-                    <i class="fa-regular fa-building"></i>
-                    Institución
-                </a>
-            </li>
-
-            <li>
-                <a href="./periodo.html">
-                    <i class="fa-regular fa-calendar"></i>
-                    Periodo
-                </a>
-            </li>
-        </ul>
-
-        <!-- info del usuario en menu lateral -->
-        <div class="user-info">
-            <img src="/api/placeholder/40/40" alt="User Avatar">
-            <div>
-                <div>Laura Azofeifa</div>
-                <small class="text-muted">Administrador</small>
-            </div>
-        </div>
-    </nav>
+<?php
+        include 'menu.php';
+    ?>
 
     <!-- main -->
     <main class="main-content">
         <div class="content-wrapper">
             <div class="top-bar">
-                <h4 class="mb-0">Gestión de Grupos</h4>
+                <h4 class="mb-0">Gestión de periodos</h4>
                 <div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#grupoModal">
-                        <i class="fas fa-plus"></i> Nuevo Grupo
+                        <i class="fas fa-plus"></i> Nuevo periodo
                     </button>
                 </div>
             </div>
 
             <!-- search bar-filtro -->
             <div class="search-box mb-4">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre o institución...">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" placeholder="Buscar por nombre de periodo">
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Fecha Inicio</label>
+                                <input type="date" class="form-control" placeholder="Fecha inicial">
+                            </div>
+                            <div class="col-6">
+                                <label>Fecha Fin</label>
+                                <input type="date" class="form-control" placeholder="Fecha final">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-primary w-100">
+                        <label>&nbsp;</label> <!-- Espacio vacío para alinear con los otros elementos -->
+                        <button class="btn btn-primary w-100" onclick="searchByFilters()">
                             <i class="fas fa-search"></i> Buscar
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- tabla de grupos -->
+            <!-- tabla de instituciones -->
             <div class="table-container">
                 <div class="table-responsive">
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre del Grupo</th>
-                                <th>Institución</th>
+                                <th>Nombre del periodo</th>
+                                <th>Fecha inicio</th>
+                                <th>Fecha fin</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -123,8 +73,9 @@
                             <!-- la tabla se poblara segun la base de datos -->
                             <tr>
                                 <td>1</td>
-                                <td>Grupo 1</td>
-                                <td>Institución 1</td>
+                                <td>Primer semestre 2024</td>
+                                <td>2024-01-01</td>
+                                <td>2024-06-30</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -134,11 +85,11 @@
                                     </button>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>2</td>
-                                <td>Grupo 2</td>
-                                <td>Institución 2</td>
+                                <td>Segundo semestre 2024</td>
+                                <td>2024-07-01</td>
+                                <td>2024-12-31</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -147,21 +98,7 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
-                            </tr>
-
-                            <tr>
-                                <td>3</td>
-                                <td>Grupo 3</td>
-                                <td>Institución 3</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            </tr> 
                         </tbody>
                     </table>
                 </div>
@@ -178,18 +115,24 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Añadir Grupo</h5>
+                    <h5 class="modal-title">Añadir periodo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="grupoForm">
                         <div class="mb-3">
-                            <label class="form-label">Nombre del Grupo</label>
+                            <label class="form-label">Nombre del periodo</label>
                             <input type="text" class="form-control" id="nombre_grupo" name="nombre_grupo" required>
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label">Institución (ID)</label>
-                            <input type="number" class="form-control" id="institucion" name="institucion" required>
+                            <label class="form-label">Fecha de inicio</label>
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fecha de fin</label>
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
                         </div>
                     </form>
                 </div>

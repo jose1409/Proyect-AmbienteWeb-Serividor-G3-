@@ -4,91 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grupos - Sistema Académico</title>
+    <title>Asignaturas - Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="View/assets/css/grupo.css">
+    <link rel="stylesheet" href="View/assets/css/asignatura.css">
 </head>
 
 <body>
-    <!-- menu lateral -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h4>Sistema Académico</h4>
-        </div>
-
-        <ul class="sidebar-menu">
-            <li>
-                <a href="./dashboard.html">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="./profesor.html">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    Profesores
-                </a>
-            </li>
-            <li>
-                <a href="./estudiante.html">
-                    <i class="fas fa-user-graduate"></i>
-                    Estudiantes
-                </a>
-            </li>
-            <li>
-                <a href="./grupo.html">
-                    <i class="fas fa-book"></i>
-                    Grupos
-                </a>
-            </li>
-            <li>
-                <a href="./asignatura.html">
-                    <i class="fas fa-layer-group"></i>
-                    Asignaturas
-                </a>
-            </li>
-            <li>
-                <a href="./calificacion.html">
-                    <i class="fas fa-star"></i>
-                    Calificaciones
-                </a>
-            </li>
-
-            <li>
-                <a href="./institucion.html" class="active">
-                    <i class="fa-regular fa-building"></i>
-                    Institución
-                </a>
-            </li>
-
-            <li>
-                <a href="./periodo.html">
-                    <i class="fa-regular fa-calendar"></i>
-                    Periodo
-                </a>
-            </li>
-        </ul>
-
-        <!-- info del usuario en menu lateral -->
-        <div class="user-info">
-            <img src="/api/placeholder/40/40" alt="User Avatar">
-            <div>
-                <div>Laura Azofeifa</div>
-                <small class="text-muted">Administrador</small>
-            </div>
-        </div>
-    </nav>
+    <?php
+    include 'menu.php';
+    ?>
 
     <!-- main -->
     <main class="main-content">
         <div class="content-wrapper">
             <div class="top-bar">
-                <h4 class="mb-0">Gestión de Institución</h4>
+                <h4 class="mb-0">Gestión de Asignaturas</h4>
                 <div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#grupoModal">
-                        <i class="fas fa-plus"></i> Nueva Institución
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#asignaturaModal">
+                        <i class="fas fa-plus"></i> Nueva Asignatura
                     </button>
                 </div>
             </div>
@@ -97,7 +32,7 @@
             <div class="search-box mb-4">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre de institución...">
+                        <input type="text" class="form-control" placeholder="Buscar por nombre...">
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-primary w-100">
@@ -107,14 +42,14 @@
                 </div>
             </div>
 
-            <!-- tabla de instituciones -->
+            <!-- tabla de asignaturas -->
             <div class="table-container">
                 <div class="table-responsive">
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre de institución</th>
+                                <th>Nombre</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -122,7 +57,7 @@
                             <!-- la tabla se poblara segun la base de datos -->
                             <tr>
                                 <td>1</td>
-                                <td>Universidad de San Carlos</td>
+                                <td>Matemáticas</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -134,19 +69,7 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Universidad Rafael Landívar</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Universidad Mariano Gálvez</td>
+                                <td>Programación</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -167,19 +90,19 @@
         </footer>
     </main>
 
-    <!-- Grupo Modal -->
-    <div class="modal fade" id="grupoModal" tabindex="-1">
+    <!-- Asignatura Modal -->
+    <div class="modal fade" id="asignaturaModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Añadir institución</h5>
+                    <h5 class="modal-title">Añadir Asignatura</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="grupoForm">
+                    <form id="asignaturaForm">
                         <div class="mb-3">
-                            <label class="form-label">Nombre de la institución</label>
-                            <input type="text" class="form-control" id="nombre_grupo" name="nombre_grupo" required>
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre_asignatura" name="nombre_asignatura" required>
                         </div>
                     </form>
                 </div>
@@ -194,4 +117,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html
+</html>

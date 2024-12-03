@@ -13,77 +13,12 @@
 </head>
 
 <body>
-    <!-- menu lateral -->
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h4>Sistema Académico</h4>
-        </div>
-
-        <ul class="sidebar-menu">
-            <li>
-                <a href="./dashboard.html" class="active">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="./profesor.html">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    Profesores
-                </a>
-            </li>
-            <li>
-                <a href="./estudiante.html">
-                    <i class="fas fa-user-graduate"></i>
-                    Estudiantes
-                </a>
-            </li>
-            <li>
-                <a href="./grupo.html">
-                    <i class="fas fa-book"></i>
-                    Grupos
-                </a>
-            </li>
-            <li>
-                <a href="./asignatura.html">
-                    <i class="fas fa-layer-group"></i>
-                    Asignaturas
-                </a>
-            </li>
-            <li>
-                <a href="./calificacion.html">
-                    <i class="fas fa-star"></i>
-                    Calificaciones
-                </a>
-            </li>
-
-            <li>
-                <a href="./institucion.html">
-                    <i class="fa-regular fa-building"></i>
-                    Institución
-                </a>
-            </li>
-
-            <li>
-                <a href="./periodo.html">
-                    <i class="fa-regular fa-calendar"></i>
-                    Periodo
-                </a>
-            </li>
-        </ul>
-
-        <!-- info del usuario en menu lateral -->
-        <div class="user-info">
-            <img src=" " alt="User Avatar">
-            <div>
-                <div>Laura Azofeifa</div>
-                <small class="text-muted">Profesor</small>
-            </div>
-        </div>
-    </nav>
-
+    <?php
+    include 'menu.php';
+    ?>
     <!-- main -->
     <main class="main-content">
+
         <div class="content-wrapper">
             <div class="top-bar">
                 <h4 class="mb-0">Dashboard</h4>
