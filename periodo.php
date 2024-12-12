@@ -12,8 +12,8 @@
 </head>
 
 <body>
-<?php
-        include 'menu.php';
+    <?php
+    include 'menu.php';
     ?>
 
     <!-- main -->
@@ -56,53 +56,124 @@
                 </div>
             </div>
 
-            <!-- tabla de instituciones -->
+            <!-- tabla de periodos -->
             <div class="table-container">
                 <div class="table-responsive">
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre del periodo</th>
-                                <th>Fecha inicio</th>
-                                <th>Fecha fin</th>
+                                <th>Nombre del Periodo</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- la tabla se poblara segun la base de datos -->
+                            <?php
+                            require_once './Controller/PeriodoController.php';
+
+                            try {
+                                // Instanciar el controlador
+                                $periodoController = new PeriodoController();
+                                $periodos = $periodoController->listar();
+
+                                if (!empty($periodos)) {
+                                    foreach ($periodos as $periodo) {
+                                        $id = htmlspecialchars($periodo->getIdPeriodo());
+                                        $nombre = htmlspecialchars($periodo->getNombrePeriodo());
+                                        $fechaInicio = htmlspecialchars($periodo->getFechaInicio());
+                                        $fechaFin = htmlspecialchars($periodo->getFechaFin());
+
+                                        echo <<<HTML
                             <tr>
-                                <td>1</td>
-                                <td>Primer semestre 2024</td>
-                                <td>2024-01-01</td>
-                                <td>2024-06-30</td>
+                                <td>{$id}</td>
+                                <td>{$nombre}</td>
+                                <td>{$fechaInicio}</td>
+                                <td>{$fechaFin}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning">
+                                    <!-- Botón Editar -->
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{$id}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger">
+
+                                    <!-- Botón Eliminar -->
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{$id}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Segundo semestre 2024</td>
-                                <td>2024-07-01</td>
-                                <td>2024-12-31</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr> 
+
+                            <!-- Modal Editar -->
+                            <div class="modal fade" id="editModal{$id}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Periodo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="./Acciones/Periodo/editar.php" method="POST">
+                                                <input type="hidden" name="action" value="editar">
+                                                <input type="hidden" name="id_periodo" value="{$id}">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nombre del Periodo</label>
+                                                    <input type="text" class="form-control" name="nombre_periodo" value="{$nombre}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Fecha Inicio</label>
+                                                    <input type="date" class="form-control" name="fecha_inicio" value="{$fechaInicio}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Fecha Fin</label>
+                                                    <input type="date" class="form-control" name="fecha_fin" value="{$fechaFin}" required>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" id="deleteModal{$id}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Eliminar Periodo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar el periodo "<strong>{$nombre}</strong>"?</p>
+                                            <form action="./Acciones/Periodo/eliminar.php" method="POST">
+                                                <input type="hidden" name="action" value="eliminar">
+                                                <input type="hidden" name="id_periodo" value="{$id}">
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5'>No se encontraron periodos en la base de datos.</td></tr>";
+                                }
+                            } catch (Exception $e) {
+                                echo "<tr><td colspan='5'>Error al consultar la base de datos: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
 
         <footer class="footer">
@@ -110,39 +181,38 @@
         </footer>
     </main>
 
-    <!-- Grupo Modal -->
+    <!-- Modal Añadir Periodo -->
     <div class="modal fade" id="grupoModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Añadir periodo</h5>
+                    <h5 class="modal-title">Añadir Periodo</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="grupoForm">
+                    <form id="periodoForm" action="./Acciones/Periodo/agregar.php" method="POST">
                         <div class="mb-3">
-                            <label class="form-label">Nombre del periodo</label>
-                            <input type="text" class="form-control" id="nombre_grupo" name="nombre_grupo" required>
+                            <label class="form-label" for="nombre_periodo">Nombre del Periodo</label>
+                            <input type="text" class="form-control" name="nombre_periodo" required>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Fecha de inicio</label>
-                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                            <label class="form-label" for="fecha_inicio">Fecha Inicio</label>
+                            <input type="date" class="form-control" name="fecha_inicio" required>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Fecha de fin</label>
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+                            <label class="form-label" for="fecha_fin">Fecha Fin</label>
+                            <input type="date" class="form-control" name="fecha_fin" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary" form="periodoForm">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

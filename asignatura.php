@@ -54,35 +54,98 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- la tabla se poblara segun la base de datos -->
+                            <?php
+                            require_once './Controller/AsignaturaController.php';
+
+                            try {
+                                // Instanciar el controlador
+                                $asignaturaController = new AsignaturaController();
+                                $asignaturas = $asignaturaController->listar();
+
+                                if (!empty($asignaturas)) {
+                                    foreach ($asignaturas as $asignatura) {
+                                        $id = htmlspecialchars($asignatura->getIdAsignatura());
+                                        $nombre = htmlspecialchars($asignatura->getNombre());
+
+                                        echo <<<HTML
                             <tr>
-                                <td>1</td>
-                                <td>Matemáticas</td>
+                                <td>{$id}</td>
+                                <td>{$nombre}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning">
+                                    <!-- Botón Editar -->
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{$id}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger">
+
+                                    <!-- Botón Eliminar -->
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{$id}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Programación</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+
+                            <!-- Modal Editar -->
+                            <div class="modal fade" id="editModal{$id}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Asignatura</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="./Acciones/Asignatura/editar.php" method="POST">
+                                            <input type="hidden" name="action" value="editar">
+                                                <input type="hidden" name="id_asignatura" value="{$id}">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nombre de la Asignatura</label>
+                                                    <input type="text" class="form-control" name="nombre_asignatura" value="{$nombre}" required>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" id="deleteModal{$id}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Eliminar Asignatura</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar la asignatura "<strong>{$nombre}</strong>"?</p>
+                                            <form action="./Acciones/Asignatura/eliminar.php" method="POST">
+                                            <input type="hidden" name="action" value="eliminar">
+                                                <input type="hidden" name="id_asignatura" value="{$id}">
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='3'>No se encontraron asignaturas en la base de datos.</td></tr>";
+                                }
+                            } catch (Exception $e) {
+                                echo "<tr><td colspan='3'>Error al consultar la base de datos: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
 
         <footer class="footer">
@@ -99,20 +162,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="asignaturaForm">
+                    <form id="asignaturaForm" action="./Acciones/Asignatura/agregar.php" method="POST">
                         <div class="mb-3">
-                            <label class="form-label">Nombre</label>
+                            <label class="form-label" for="nombre_asignatura">Nombre de la asignatura</label>
                             <input type="text" class="form-control" id="nombre_asignatura" name="nombre_asignatura" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary" form="asignaturaForm">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
