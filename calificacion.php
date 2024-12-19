@@ -68,44 +68,127 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- la tabla se poblara segun la base de datos -->
-                            <tr>
-                                <td>1</td>
-                                <td>Estudiante 1</td>
-                                <td>Acta 1</td>
-                                <td>90</td>
-                                <td>80</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>92</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Estudiante 2</td>
-                                <td>Acta 2</td>
-                                <td>80</td>
-                                <td>70</td>
-                                <td>90</td>
-                                <td>100</td>
-                                <td>85</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <?php
+                        require_once './Controller/CalificacionController.php';
+                        try {
+                            // Instanciar el controlador
+                            $controller = new CalificacionController();
+                            $calificaciones = $controller->listar();
+                            
+                            // Verificar si hay registros de calificaciones
+                            if (!empty($calificaciones)) {
+                                foreach ($calificaciones as $calificacion) {
+                                    $id_calificacion = htmlspecialchars($calificacion->getIdCalificacion());
+                                    $id_estudiante = htmlspecialchars($calificacion->getIdEstudiante());
+                                    $id_acta = htmlspecialchars($calificacion->getIdActa());
+                                    $trabajo_cotidiano = htmlspecialchars($calificacion->getTrabajoCotidiano());
+                                    $tareas = htmlspecialchars($calificacion->getTareas());
+                                    $proyecto = htmlspecialchars($calificacion->getProyecto());
+                                    $asistencia = htmlspecialchars($calificacion->getAsistencia());
+                                    $calificacion_final = htmlspecialchars($calificacion->getCalificacionFinal());
+
+                                    echo <<<HTML
+                                    <tr>
+                                        <td>{$id_calificacion}</td>
+                                        <td>{$id_estudiante}</td>
+                                        <td>{$id_acta}</td>
+                                        <td>{$trabajo_cotidiano}</td>
+                                        <td>{$tareas}</td>
+                                        <td>{$proyecto}</td>
+                                        <td>{$asistencia}</td>
+                                        <td>{$calificacion_final}</td>
+                                        <td>
+
+                                            <!-- Botón Editar -->
+                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{$id_calificacion}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <!-- Botón Eliminar -->
+                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{$id_calificacion}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal Editar -->
+                                    <div class="modal fade" id="editModal{$id_calificacion}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Editar Calificación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="./Acciones/Calificaciones/editar.php" method="POST">
+                                                        <input type="hidden" name="action" value="editar">
+                                                        <input type="hidden" name="id_calificacion" value="{$id_calificacion}">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">ID Estudiante</label>
+                                                            <input type="number" class="form-control" name="id_estudiante" value="{$id_estudiante}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">ID Acta</label>
+                                                            <input type="number" class="form-control" name="id_acta" value="{$id_acta}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Trabajo Cotidiano</label>
+                                                            <input type="number" step="0.01" class="form-control" name="trabajo_cotidiano" value="{$trabajo_cotidiano}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Tareas</label>
+                                                            <input type="number" step="0.01" class="form-control" name="tareas" value="{$tareas}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Proyecto</label>
+                                                            <input type="number" step="0.01" class="form-control" name="proyecto" value="{$proyecto}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Asistencia</label>
+                                                            <input type="number" step="0.01" class="form-control" name="asistencia" value="{$asistencia}" required>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal Eliminar -->
+                                    <div class="modal fade" id="deleteModal{$id_calificacion}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Eliminar Calificación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>¿Estás seguro de que deseas eliminar esta calificación?</p>
+                                                    <form action="./Acciones/Calificaciones/eliminar.php" method="POST">
+                                                        <input type="hidden" name="action" value="eliminar">
+                                                        <input type="hidden" name="id_calificacion" value="{$id_calificacion}">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    HTML;
+                                }
+                            } else {
+                                echo "<tr><td colspan='9'>No se encontraron registros en la tabla <code>CALIFICACIONES</code>.</td></tr>";
+                            }
+                        } catch (Exception $e) {
+                            echo "<tr><td colspan='9'>Error al consultar la base de datos: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                        }
+                        ?>
+                    </tbody>
                     </table>
                 </div>
             </div>
