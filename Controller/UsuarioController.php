@@ -41,7 +41,6 @@ class UsuarioController
     }
 }
 
-// Llamar automáticamente al método login si se accede directamente al archivo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new UsuarioController();
     $controller->login();
