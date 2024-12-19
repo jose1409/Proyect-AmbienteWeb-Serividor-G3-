@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="stylesheet" href="View/assets/css/login.css">
 
 </head>
@@ -55,19 +58,55 @@
             e.preventDefault();
             const form = new FormData(e.target);
 
-            const response = await fetch(e.target.action, {
-                method: 'POST',
-                body: form,
-            });
+            try {
+                const response = await fetch(e.target.action, {
+                    method: 'POST',
+                    body: form,
+                });
 
-            const result = await response.json();
-            if (result.success) {
-                alert(result.message);
-                window.location.href = 'dashboard.php'; // Redirigir al dashboard
-            } else {
-                alert(result.message);
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        title: '¡Éxito!',
+                        text: result.message,
+                        icon: 'success',
+                        confirmButtonText: 'Continuar',
+                    }).then(() => {
+                        window.location.href = 'dashboard.php';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: result.message,
+                        icon: 'error',
+                        confirmButtonText: 'Intentar de nuevo',
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un problema inesperado. Intente de nuevo más tarde.',
+                    icon: 'error',
+                    confirmButtonText: 'Cerrar',
+                });
             }
         });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
     </script>
 </body>
 
