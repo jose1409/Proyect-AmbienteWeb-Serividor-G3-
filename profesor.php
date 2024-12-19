@@ -14,6 +14,13 @@
     <!-- menu lateral -->
     <?php include 'menu.php';
 
+    session_start();
+
+    if (!isset($_SESSION['usuario'])) {
+        header("Location: login.php");
+        exit();
+    }
+
     if (isset($_GET['error'])) {
         $error = $_GET['error'];
         $message = '';

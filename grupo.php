@@ -11,7 +11,16 @@
 </head>
 
 <body>
-    <?php include 'menu.php'; ?>
+    <?php include 'menu.php'; 
+    
+    session_start();
+
+    if (!isset($_SESSION['usuario'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+    ?>
 
     <!-- main -->
     <main class="main-content">

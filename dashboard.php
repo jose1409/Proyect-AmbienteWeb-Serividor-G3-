@@ -15,6 +15,13 @@
 <body>
     <?php
     include 'menu.php';
+
+    session_start();
+
+    if (!isset($_SESSION['usuario'])) {
+        header("Location: login.php");
+        exit();
+    }
     ?>
     <!-- main -->
     <main class="main-content">
@@ -26,9 +33,9 @@
                     <button class="btn btn-outline-secondary">
                         <i class="fas fa-bell"></i>
                     </button>
-                    <button class="btn btn-outline-danger ms-2">
+                    <a href="logout.php" class="btn btn-outline-danger ms-2">
                         <i class="fas fa-sign-out-alt"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -39,7 +46,7 @@
                         <i class="fas fa-chalkboard-teacher module-icon"></i>
                         <h5>Profesores</h5>
                         <p class="text-muted">Gestión de profesores y asignaciones</p>
-                        <button class="btn btn-outline-primary w-100">Acceder</button>
+                        <a href="profesor.php" class="btn btn-outline-primary w-100">Acceder</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -47,7 +54,7 @@
                         <i class="fas fa-user-graduate module-icon"></i>
                         <h5>Estudiantes</h5>
                         <p class="text-muted">Administración de estudiantes</p>
-                        <button class="btn btn-outline-primary w-100">Acceder</button>
+                        <a href="estudiante.php" class="btn btn-outline-primary w-100">Acceder</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -55,7 +62,7 @@
                         <i class="fas fa-book module-icon"></i>
                         <h5>Grupos y Asignaturas</h5>
                         <p class="text-muted">Gestión de grupos y materias</p>
-                        <button class="btn btn-outline-primary w-100">Acceder</button>
+                        <a href="grupo.php" class="btn btn-outline-primary w-100">Acceder</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -63,7 +70,7 @@
                         <i class="fas fa-star module-icon"></i>
                         <h5>Calificaciones</h5>
                         <p class="text-muted">Registro y consulta de notas</p>
-                        <button class="btn btn-outline-primary w-100">Acceder</button>
+                        <a href="calificacion.php" class="btn btn-outline-primary w-100">Acceder</a>
                     </div>
                 </div>
             </div>

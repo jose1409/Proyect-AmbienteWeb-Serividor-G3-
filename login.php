@@ -7,12 +7,13 @@
     <title>Login - Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  
+
     <link rel="stylesheet" href="View/assets/css/login.css">
 
 </head>
 
 <!-- form login -->
+
 <body>
     <div class="login-container">
         <div class="login-header">
@@ -20,13 +21,13 @@
             <p class="text-muted">Ingrese sus credenciales para continuar</p>
         </div>
 
-        <form>
+        <form id="loginForm" action="Controller/UsuarioController.php" method="POST">
             <div class="mb-3">
-                <input type="email" class="form-control" id="email" placeholder="Correo electrónico">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Correo electrónico" required>
             </div>
 
             <div class="password-field">
-                <input type="password" class="form-control" id="password" placeholder="Contraseña">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" required>
                 <button type="button" class="password-toggle" onclick="togglePassword()">
                     <i class="fas fa-eye" id="togglePassword"></i>
                 </button>
@@ -50,20 +51,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('togglePassword');
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = new FormData(e.target);
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+            const response = await fetch(e.target.action, {
+                method: 'POST',
+                body: form,
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                window.location.href = 'dashboard.php'; // Redirigir al dashboard
             } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                alert(result.message);
             }
-        }
+        });
     </script>
 </body>
 
