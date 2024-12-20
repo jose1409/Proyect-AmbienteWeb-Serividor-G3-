@@ -1,5 +1,6 @@
 <?php
-class Calificacion
+
+class calificacion
 {
     private $id_calificacion;
     private $id_estudiante;

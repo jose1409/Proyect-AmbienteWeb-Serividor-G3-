@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../DB/Database.php';
-require_once __DIR__ . '/../Models/Calificacion.php';
+require_once __DIR__ . '/../Models/Calificaciones.php';
 
 class CalificacionController
 {
