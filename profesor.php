@@ -11,16 +11,13 @@
 </head>
 
 <body>
-    <!-- menu lateral -->
-    <?php include 'menu.php';
-
+    <?php
+    include 'menu.php';
     session_start();
-
     if (!isset($_SESSION['usuario'])) {
         header("Location: login.php");
         exit();
     }
-
     if (isset($_GET['error'])) {
         $error = $_GET['error'];
         $message = '';
@@ -52,10 +49,8 @@
             });
         </script>";
     }
-
     ?>
 
-    <!-- main -->
     <main class="main-content">
         <div class="content-wrapper">
             <div class="top-bar">
@@ -67,30 +62,36 @@
                 </div>
             </div>
 
-            <!-- search bar-filtro -->
-            <div class="search-box mb-4">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre o cédula...">
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-select">
-                            <option value="">Filtrar por institución</option>
-                            <option value="1">Institución 1</option>
-                            <option value="2">Institución 2</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">
-                            <i class="fas fa-search"></i> Buscar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- tabla de profesor -->
             <div class="table-container">
                 <div class="table-responsive">
+
+                <!-- filtro -->
+                    <form class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" placeholder="ID" id="filter-id">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Cédula" id="filter-cedula">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Nombre" id="filter-nombre">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Primer Apellido" id="filter-primer-apellido">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Segundo Apellido" id="filter-segundo-apellido">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Institución" id="filter-institucion">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary w-100" id="apply-filters">Filtrar</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
@@ -99,121 +100,124 @@
                                 <th>Nombre</th>
                                 <th>Primer Apellido</th>
                                 <th>Segundo Apellido</th>
-                                <th>ID Institución</th>
+                                <th>Institución</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            require_once './Controller/ProfesorController.php';
-                            try {
-                                // Instanciar el controlador
-                                $controller = new ProfesorController();
-                                $profesores = $controller->listar();
-                                // Verificar si hay profesores
-                                if (!empty($profesores)) {
-                                    foreach ($profesores as $profesor) {
-                                        $id = htmlspecialchars($profesor->getIdProfesor());
-                                        $cedula = htmlspecialchars($profesor->getCedula());
-                                        $nombre = htmlspecialchars($profesor->getNombre());
-                                        $apellido1 = htmlspecialchars($profesor->getApellido1());
-                                        $apellido2 = htmlspecialchars($profesor->getApellido2());
-                                        $id_institucion = htmlspecialchars($profesor->getIdInstitucion());
-                                        echo <<<HTML
-                                        <tr>
-                                            <td>{$id}</td>
-                                            <td>{$cedula}</td>
-                                            <td>{$nombre}</td>
-                                            <td>{$apellido1}</td>
-                                            <td>{$apellido2}</td>
-                                            <td>{$id_institucion}</td>
-                                            <td>
+                        <?php
+                        require_once './Controller/ProfesorController.php';
+                        require_once './Controller/InstitucionController.php';
 
-                                                <!-- Botón Editar -->
-                                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{$id}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                        try {
+                            $controller = new ProfesorController();
+                            $institucionController = new InstitucionController();
+                            $profesores = $controller->listar();
+                            $instituciones = $institucionController->listar();
 
-                                                <!-- Botón Eliminar -->
-                                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{$id}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                            if (!empty($profesores)) {
+                                foreach ($profesores as $profesor) {
+                                    $id = htmlspecialchars($profesor->getIdProfesor());
+                                    $cedula = htmlspecialchars($profesor->getCedula());
+                                    $nombre = htmlspecialchars($profesor->getNombre());
+                                    $apellido1 = htmlspecialchars($profesor->getApellido1());
+                                    $apellido2 = htmlspecialchars($profesor->getApellido2());
+                                    $id_institucion = htmlspecialchars($profesor->getIdInstitucion());
+                                    echo <<<HTML
+                                    <tr>
+                                        <td>{$id}</td>
+                                        <td>{$cedula}</td>
+                                        <td>{$nombre}</td>
+                                        <td>{$apellido1}</td>
+                                        <td>{$apellido2}</td>
+                                        <td>{$id_institucion}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{$id}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{$id}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
 
-                                        <!-- Modal Editar -->
-                                        <div class="modal fade" id="editModal{$id}" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Editar Profesor</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="./Acciones/Profesores/editar.php" method="POST">
-                                                            <input type="hidden" name="action" value="editar">
-                                                            <input type="hidden" name="id_profesor" value="{$id}">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Cédula</label>
-                                                                <input type="text" class="form-control" name="cedula" value="{$cedula}" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Nombre</label>
-                                                                <input type="text" class="form-control" name="nombre" value="{$nombre}" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Primer Apellido</label>
-                                                                <input type="text" class="form-control" name="apellido1" value="{$apellido1}" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Segundo Apellido</label>
-                                                                <input type="text" class="form-control" name="apellido2" value="{$apellido2}">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label class="form-label">ID Institución</label>
-                                                                <input type="number" class="form-control" name="id_institucion" value="{$id_institucion}" required>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                    <div class="modal fade" id="editModal{$id}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Editar Profesor</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Modal Eliminar -->
-                                        <div class="modal fade" id="deleteModal{$id}" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Eliminar Profesor</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Estás seguro de que deseas eliminar al profesor "<strong>{$nombre} {$apellido1}</strong>"?</p>
-                                                        <form action="./Acciones/Profesores/eliminar.php" method="POST">
-                                                            <input type="hidden" name="action" value="eliminar">
-                                                            <input type="hidden" name="id_profesor" value="{$id}">
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        HTML;
+                                                <div class="modal-body">
+                                                    <form action="./Acciones/Profesores/editar.php" method="POST">
+                                                        <input type="hidden" name="id_profesor" value="{$id}">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Cédula</label>
+                                                            <input type="text" class="form-control" name="cedula" value="{$cedula}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Nombre</label>
+                                                            <input type="text" class="form-control" name="nombre" value="{$nombre}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Primer Apellido</label>
+                                                            <input type="text" class="form-control" name="apellido1" value="{$apellido1}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Segundo Apellido</label>
+                                                            <input type="text" class="form-control" name="apellido2" value="{$apellido2}">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Institución</label>
+                                                            <select class="form-select" name="id_institucion" required>
+                                                                <option value="">Seleccione una institución</option>
+HTML;
+                                    foreach ($instituciones as $institucion) {
+                                        $selected = $institucion->getIdInstitucion() == $id_institucion ? 'selected' : '';
+                                        echo "<option value=\"{$institucion->getIdInstitucion()}\" $selected>{$institucion->getNombre()}</option>";
                                     }
-                                } else {
-                                    echo "<tr><td colspan='7'>No se encontraron registros en la tabla <code>profesor</code>.</td></tr>";
+                                    echo <<<HTML
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="deleteModal{$id}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Eliminar Profesor</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>¿Estás seguro de que deseas eliminar al profesor "<strong>{$nombre} {$apellido1}</strong>"?</p>
+                                                    <form action="./Acciones/Profesores/eliminar.php?action=eliminar" method="POST">
+                                                        <input type="hidden" name="id_profesor" value="{$id}">
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    HTML;
                                 }
-                            } catch (Exception $e) {
-                                echo "<tr><td colspan='7'>Error al consultar la base de datos: " . htmlspecialchars($e->getMessage()) . "</td></tr>";
+                            } else {
+                                echo "<tr><td colspan='7' class='text-center'>No hay profesores registrados.</td></tr>";
                             }
-                            ?>
+                        } catch (Exception $e) {
+                            echo "<tr><td colspan='7' class='text-center'>Error: No se pudieron cargar los datos.</td></tr>";
+                        }
+                        ?>
                         </tbody>
                     </table>
                 </div>
@@ -224,7 +228,6 @@
         </footer>
     </main>
 
-    <!-- Modal para agregar profesor -->
     <div class="modal fade" id="professorModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -256,8 +259,15 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">ID Institución</label>
-                                <input type="number" class="form-control" name="id_institucion" required>
+                                <label class="form-label">Institución</label>
+                                <select class="form-select" name="id_institucion" required>
+                                    <option value="">Seleccione una institución</option>
+                                    <?php
+                                    foreach ($instituciones as $institucion) {
+                                        echo "<option value='{$institucion->getIdInstitucion()}'>{$institucion->getNombre()}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -270,13 +280,12 @@
         </div>
     </div>
 
-    <!-- Modal de Error -->
     <div class="modal fade" id="errorModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <p id="errorMessage"></p>
@@ -288,8 +297,37 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            const idFilter = document.getElementById('filter-id').value.toLowerCase();
+            const cedulaFilter = document.getElementById('filter-cedula').value.toLowerCase();
+            const nombreFilter = document.getElementById('filter-nombre').value.toLowerCase();
+            const primerApellidoFilter = document.getElementById('filter-primer-apellido').value.toLowerCase();
+            const segundoApellidoFilter = document.getElementById('filter-segundo-apellido').value.toLowerCase();
+            const institucionFilter = document.getElementById('filter-institucion').value.toLowerCase();
+
+            const rows = document.querySelectorAll('.custom-table tbody tr');
+            rows.forEach(row => {
+                const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const cedula = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const nombre = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const primerApellido = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const segundoApellido = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                const institucion = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+
+                const match =
+                    (idFilter === "" || id.includes(idFilter)) &&
+                    (cedulaFilter === "" || cedula.includes(cedulaFilter)) &&
+                    (nombreFilter === "" || nombre.includes(nombreFilter)) &&
+                    (primerApellidoFilter === "" || primerApellido.includes(primerApellidoFilter)) &&
+                    (segundoApellidoFilter === "" || segundoApellido.includes(segundoApellidoFilter)) &&
+                    (institucionFilter === "" || institucion.includes(institucionFilter));
+
+                row.style.display = match ? '' : 'none';
+            });
+        });
+    </script>
 </body>
 
 </html>

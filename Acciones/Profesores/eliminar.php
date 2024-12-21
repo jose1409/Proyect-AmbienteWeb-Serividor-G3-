@@ -2,7 +2,7 @@
 require_once '../../Controller/ProfesorController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $action = $_GET['action'] ?? '';
     $id_profesor = filter_input(INPUT_POST, 'id_profesor', FILTER_VALIDATE_INT);
 
     if ($action === 'eliminar' && $id_profesor) {

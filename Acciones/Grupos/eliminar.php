@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../Controller/GrupoController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $action = $_GET['action'] ?? '';
     $id_grupo = filter_input(INPUT_POST, 'id_grupo', FILTER_VALIDATE_INT);
 
     if ($action === 'eliminar' && $id_grupo) {

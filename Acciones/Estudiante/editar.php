@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../Controller/EstudianteController.php';
 require_once __DIR__ . '/../../Controller/GrupoController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $action = $_GET['action'] ?? '';
     $id_estudiante = filter_input(INPUT_POST, 'id_estudiante', FILTER_VALIDATE_INT);
 
     if ($action === 'editar' && $id_estudiante) {

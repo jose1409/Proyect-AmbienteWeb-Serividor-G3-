@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../Controller/GrupoController.php';
 require_once __DIR__ . '/../../Controller/InstitucionController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+    $action = $_GET['action'] ?? '';
     $id_grupo = filter_input(INPUT_POST, 'id_grupo', FILTER_VALIDATE_INT);
 
     if ($action === 'editar' && $id_grupo) {
@@ -41,8 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     } else {
-        header("Location: ../../grupo.php?error=invalid_action");
-        exit;
+        
+       header("Location: ../../grupo.php?error=invalid_action");
+       exit;
     }
 }
 ?>

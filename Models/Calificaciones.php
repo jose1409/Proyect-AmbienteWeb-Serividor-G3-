@@ -4,18 +4,16 @@ class calificacion
 {
     private $id_calificacion;
     private $id_estudiante;
-    private $id_acta;
     private $trabajo_cotidiano;
     private $tareas;
     private $proyecto;
     private $asistencia;
     private $calificacion_final;
 
-    public function __construct($id_calificacion = null, $id_estudiante = null, $id_acta = null, $trabajo_cotidiano = null, $tareas = null, $proyecto = null, $asistencia = null, $calificacion_final = null)
+    public function __construct($id_calificacion = null, $id_estudiante = null, $trabajo_cotidiano = null, $tareas = null, $proyecto = null, $asistencia = null, $calificacion_final = null)
     {
         $this->id_calificacion = $id_calificacion;
         $this->id_estudiante = $id_estudiante;
-        $this->id_acta = $id_acta;
         $this->trabajo_cotidiano = $trabajo_cotidiano;
         $this->tareas = $tareas;
         $this->proyecto = $proyecto;
@@ -42,16 +40,6 @@ class calificacion
     public function setIdEstudiante($id_estudiante)
     {
         $this->id_estudiante = $id_estudiante;
-    }
-
-    public function getIdActa()
-    {
-        return $this->id_acta;
-    }
-
-    public function setIdActa($id_acta)
-    {
-        $this->id_acta = $id_acta;
     }
 
     public function getTrabajoCotidiano()

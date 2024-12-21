@@ -1,41 +1,29 @@
 <?php
 require_once __DIR__ . '/../../Controller/CalificacionController.php';
-require_once __DIR__ . '/../../Controller/GrupoController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar y recibir los datos
-    $cedula = filter_input(INPUT_POST, 'cedula', FILTER_SANITIZE_STRING);
-    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
-    $apellido1 = filter_input(INPUT_POST, 'apellido1', FILTER_SANITIZE_STRING);
-    $apellido2 = filter_input(INPUT_POST, 'apellido2', FILTER_SANITIZE_STRING);
-    $id_grupo = filter_input(INPUT_POST, 'id_grupo', FILTER_VALIDATE_INT);
-
-    if ($cedula && $nombre && $apellido1 && $id_grupo) {
+    $id_estudiante = filter_input(INPUT_POST, 'id_estudiante', FILTER_VALIDATE_INT);
+    $trabajo_cotidiano = filter_input(INPUT_POST, 'trabajo_cotidiano', FILTER_VALIDATE_FLOAT);
+    $tareas = filter_input(INPUT_POST, 'tareas', FILTER_VALIDATE_FLOAT);
+    $proyecto = filter_input(INPUT_POST, 'proyecto', FILTER_VALIDATE_FLOAT);
+    $asistencia = filter_input(INPUT_POST, 'asistencia', FILTER_VALIDATE_FLOAT);
+   
+    if ($id_estudiante && $trabajo_cotidiano && $proyecto && $asistencia && $tareas) {
         try {
-            // Validar si el grupo existe
-            $grupoController = new GrupoController();
-            $grupo = $grupoController->obtenerPorId($id_grupo);
 
-            if ($grupo) {
-                // Si el grupo existe, obtener también su nombre
-                $nombre_grupo = $grupo->getNombreGrupo();
+            // Crear instancia del controlador
+            $controller = new CalificacionController();
+            $calificacion = new calificacion(1, $id_estudiante, $trabajo_cotidiano, $tareas, $proyecto, $asistencia, 0);
+            $calificacion->setCalificacionFinal($calificacion->calcularCalificacionFinal());
 
-                // Crear instancia del controlador
-                $controller = new CalificacionController();
-                $Calificacion = new Calificacion(null, $cedula, $nombre, $apellido1, $apellido2, $id_grupo, $nombre_grupo);
-
-                if ($controller->insertar($calificacion)) {
-                    // Redirigir con mensaje de éxito
-                    header("Location: ../../calificacion.php?success=1");
-                    exit;
-                } else {
-                    // Redirigir con mensaje de error
-                    header("Location: ../../calificacion.php?error=insert");
-                    exit;
-                }
+            if ($controller->insertar($calificacion)) {
+                // Redirigir con mensaje de éxito
+                header("Location: ../../calificacion.php?success=1");
+                exit;
             } else {
-                // Si el grupo no existe, redirigir con mensaje de error
-                header("Location: ../../calificacion.php?error=invalid_group");
+                // Redirigir con mensaje de error
+                header("Location: ../../calificacion.php?error=insert");
                 exit;
             }
         } catch (Exception $e) {

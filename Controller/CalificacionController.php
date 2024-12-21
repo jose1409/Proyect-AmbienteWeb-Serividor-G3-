@@ -12,27 +12,25 @@ class CalificacionController
     }
 
     // Insertar una calificación
-    public function insertar(Calificacion $calificacion)
+    public function insertar(calificacion $calificacion)
     {
-        $id_estudiante = $this->db->escapeString($calificacion->getIdEstudiante());
-        $id_acta = $this->db->escapeString($calificacion->getIdActa());
+        $id_estudiante = $this->db->escapeString($calificacion->getIdEstudiante());      
         $trabajo_cotidiano = $this->db->escapeString($calificacion->getTrabajoCotidiano());
         $tareas = $this->db->escapeString($calificacion->getTareas());
         $proyecto = $this->db->escapeString($calificacion->getProyecto());
         $asistencia = $this->db->escapeString($calificacion->getAsistencia());
         $calificacion_final = $this->db->escapeString($calificacion->getCalificacionFinal());
 
-        $query = "INSERT INTO CALIFICACIONES (id_estudiante, id_acta, trabajo_cotidiano, tareas, proyecto, asistencia, calificacion_final) 
-                  VALUES ($id_estudiante, $id_acta, $trabajo_cotidiano, $tareas, $proyecto, $asistencia, $calificacion_final)";
+        $query = "INSERT INTO CALIFICACIONES (id_estudiante, trabajo_cotidiano, tareas, proyecto, asistencia, calificacion_final) 
+                  VALUES ($id_estudiante, $trabajo_cotidiano, $tareas, $proyecto, $asistencia, $calificacion_final)";
         return $this->db->query($query);
     }
 
     // Actualizar una calificación
-    public function actualizar(Calificacion $calificacion)
+    public function actualizar(calificacion $calificacion)
     {
         $id = $calificacion->getIdCalificacion();
         $id_estudiante = $this->db->escapeString($calificacion->getIdEstudiante());
-        $id_acta = $this->db->escapeString($calificacion->getIdActa());
         $trabajo_cotidiano = $this->db->escapeString($calificacion->getTrabajoCotidiano());
         $tareas = $this->db->escapeString($calificacion->getTareas());
         $proyecto = $this->db->escapeString($calificacion->getProyecto());
@@ -40,7 +38,7 @@ class CalificacionController
         $calificacion_final = $this->db->escapeString($calificacion->getCalificacionFinal());
 
         $query = "UPDATE CALIFICACIONES 
-                  SET id_estudiante = $id_estudiante, id_acta = $id_acta, trabajo_cotidiano = $trabajo_cotidiano, 
+                  SET id_estudiante = $id_estudiante, trabajo_cotidiano = $trabajo_cotidiano, 
                       tareas = $tareas, proyecto = $proyecto, asistencia = $asistencia, calificacion_final = $calificacion_final 
                   WHERE id_calificacion = $id";
         return $this->db->query($query);
@@ -62,10 +60,9 @@ class CalificacionController
         $calificaciones = [];
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $calificaciones[] = new Calificacion(
+                $calificaciones[] = new calificacion(
                     $row['id_calificacion'],
                     $row['id_estudiante'],
-                    $row['id_acta'],
                     $row['trabajo_cotidiano'],
                     $row['tareas'],
                     $row['proyecto'],
@@ -89,7 +86,6 @@ class CalificacionController
             return new Calificacion(
                 $row['id_calificacion'],
                 $row['id_estudiante'],
-                $row['id_acta'],
                 $row['trabajo_cotidiano'],
                 $row['tareas'],
                 $row['proyecto'],

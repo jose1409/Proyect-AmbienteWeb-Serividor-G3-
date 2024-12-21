@@ -51,7 +51,8 @@ class ProfesorController
     // Listar todos los profesores
     public function listar()
     {
-        $query = "SELECT * FROM profesor";
+        $query = "SELECT profesor.*, institucion.nombre AS nombreIns  FROM profesor,institucion WHERE profesor.id_institucion = institucion.id_institucion";
+        
         $result = $this->db->query($query);
 
         $profesores = [];
@@ -63,7 +64,7 @@ class ProfesorController
                     $row['nombre'],
                     $row['apellido1'],
                     $row['apellido2'],
-                    $row['id_institucion']
+                    $row['nombreIns']
                 );
             }
         }
@@ -74,7 +75,7 @@ class ProfesorController
     // Obtener un profesor por ID
     public function obtenerPorId($id_profesor)
     {
-        $query = "SELECT * FROM profesor WHERE id_profesor = $id_profesor";
+        $query = "SELECT profesor.*, institucion.nombre AS nombreIns  FROM profesor,institucion WHERE profesor.id_institucion = institucion.id_institucion AND id_profesor = $id_profesor";
         $result = $this->db->query($query);
 
         if ($result->num_rows > 0) {
@@ -85,7 +86,7 @@ class ProfesorController
                 $row['nombre'],
                 $row['apellido1'],
                 $row['apellido2'],
-                $row['id_institucion']
+                $row['nombreIns']
             );
         }
 

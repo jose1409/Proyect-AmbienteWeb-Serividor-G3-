@@ -30,8 +30,7 @@
             <div class="top-bar">
                 <h4 class="mb-0">Dashboard</h4>
                 <div>
-                    <button class="btn btn-outline-secondary">
-                        <i class="fas fa-bell"></i>
+                    
                     </button>
                     <a href="logout.php" class="btn btn-outline-danger ms-2">
                         <i class="fas fa-sign-out-alt"></i>

@@ -36,37 +36,32 @@
                 </div>
             </div>
 
-            <!-- search bar-filtro -->
-            <div class="search-box mb-4">
-                <div class="row">
-                    <div class="col-md-5">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" placeholder="Buscar por nombre de periodo">
-                    </div>
-                    <div class="col-md-5">
-                        <div class="row">
-                            <div class="col-6">
-                                <label>Fecha Inicio</label>
-                                <input type="date" class="form-control" placeholder="Fecha inicial">
-                            </div>
-                            <div class="col-6">
-                                <label>Fecha Fin</label>
-                                <input type="date" class="form-control" placeholder="Fecha final">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label>&nbsp;</label> <!-- Espacio vacío para alinear con los otros elementos -->
-                        <button class="btn btn-primary w-100" onclick="searchByFilters()">
-                            <i class="fas fa-search"></i> Buscar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <!-- tabla de periodos -->
             <div class="table-container">
                 <div class="table-responsive">
+
+                    <!-- filtro -->
+                    <form class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" placeholder="ID" id="filter-id">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Nombre" id="filter-nombre">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Fecha Inicio" id="filter-fecha-inicio">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Fecha Fin" id="filter-fecha-fin">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary w-100" id="apply-filters">Filtrar</button>
+                            </div>
+                        </div>
+                    </form>
+
+
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
@@ -223,6 +218,33 @@ HTML;
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            const idFilter = document.getElementById('filter-id').value.toLowerCase();
+            const nombreFilter = document.getElementById('filter-nombre').value.toLowerCase();
+            const fechaInicioFilter = document.getElementById('filter-fecha-inicio').value.toLowerCase();
+            const fechaFinFilter = document.getElementById('filter-fecha-fin').value.toLowerCase();
+
+            const rows = document.querySelectorAll('.custom-table tbody tr');
+            rows.forEach(row => {
+                const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const nombre = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const fechaInicio = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const fechaFin = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+                const match =
+                    (idFilter === "" || id.includes(idFilter)) &&
+                    (nombreFilter === "" || nombre.includes(nombreFilter)) &&
+                    (fechaInicioFilter === "" || fechaInicio.includes(fechaInicioFilter)) &&
+                    (fechaFinFilter === "" || fechaFin.includes(fechaFinFilter)) 
+
+                row.style.display = match ? '' : 'none';
+            });
+        });
+    </script>
+
+
 </body>
 
 </html

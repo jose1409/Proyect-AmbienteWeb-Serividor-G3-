@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <?php include 'menu.php'; 
-    
+    <?php include 'menu.php';
+
     session_start();
 
     if (!isset($_SESSION['usuario'])) {
@@ -34,23 +34,38 @@
                 </div>
             </div>
 
-            <!-- search bar-filtro -->
-            <div class="search-box mb-4">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre o grupo...">
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">
-                            <i class="fas fa-search"></i> Buscar
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- tabla de estudiantes -->
             <div class="table-container">
                 <div class="table-responsive">
+
+                <!-- filtro -->
+                    <form class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" placeholder="ID" id="filter-id">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Cédula" id="filter-cedula">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Nombre" id="filter-nombre">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Primer Apellido" id="filter-primer-apellido">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Segundo Apellido" id="filter-segundo-apellido">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Grupo" id="filter-grupo">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary w-100" id="apply-filters">Filtrar</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
@@ -118,7 +133,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="./Acciones/Estudiante/editar.php" method="POST">
+                                                        <form action="./Acciones/Estudiante/editar.php?action=editar" method="POST">
                                                             <input type="hidden" name="id_estudiante" value="{$id_estudiante}">
                                                             <div class="mb-3">
                                                                 <label class="form-label">Cédula</label>
@@ -168,7 +183,7 @@ HTML;
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>¿Estás seguro de que deseas eliminar al estudiante "<strong>{$nombre} {$apellido1}</strong>"?</p>
-                                                        <form action="./Acciones/Estudiante/eliminar.php" method="POST">
+                                                        <form action="./Acciones/Estudiante/eliminar.php?action=eliminar" method="POST">
                                                             <input type="hidden" name="id_estudiante" value="{$id_estudiante}">
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -248,6 +263,37 @@ HTML;
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            const idFilter = document.getElementById('filter-id').value.toLowerCase();
+            const cedulaFilter = document.getElementById('filter-cedula').value.toLowerCase();
+            const nombreFilter = document.getElementById('filter-nombre').value.toLowerCase();
+            const primerApellidoFilter = document.getElementById('filter-primer-apellido').value.toLowerCase();
+            const segundoApellidoFilter = document.getElementById('filter-segundo-apellido').value.toLowerCase();
+            const grupoFilter = document.getElementById('filter-grupo').value.toLowerCase();
+
+            const rows = document.querySelectorAll('.custom-table tbody tr');
+            rows.forEach(row => {
+                const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const cedula = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const nombre = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const primerApellido = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const segundoApellido = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                const grupo = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+
+                const match =
+                    (idFilter === "" || id.includes(idFilter)) &&
+                    (cedulaFilter === "" || cedula.includes(cedulaFilter)) &&
+                    (nombreFilter === "" || nombre.includes(nombreFilter)) &&
+                    (primerApellidoFilter === "" || primerApellido.includes(primerApellidoFilter)) &&
+                    (segundoApellidoFilter === "" || segundoApellido.includes(segundoApellidoFilter)) &&
+                    (grupoFilter === "" || grupo.includes(grupoFilter));
+
+                row.style.display = match ? '' : 'none';
+            });
+        });
+    </script>
+
 </body>
 
 </html>

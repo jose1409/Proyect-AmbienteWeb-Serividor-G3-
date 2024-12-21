@@ -36,25 +36,26 @@
                 </div>
             </div>
 
-            <!-- search bar-filtro -->
-            <div class="search-box mb-4">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Buscar por nombre de institución...">
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100">
-                            <i class="fas fa-search"></i> Buscar
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- tabla de instituciones -->
-
-
             <div class="table-container">
                 <div class="table-responsive">
+
+                    <!-- filtro -->
+                    <form class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" placeholder="ID" id="filter-id">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" placeholder="Institución" id="filter-institucion">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary w-100" id="apply-filters">Filtrar</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
@@ -190,6 +191,26 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            const idFilter = document.getElementById('filter-id').value.toLowerCase();
+            const institucionFilter = document.getElementById('filter-institucion').value.toLowerCase();
+
+            const rows = document.querySelectorAll('.custom-table tbody tr');
+            rows.forEach(row => {
+                const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const institucion = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                const match =
+                    (idFilter === "" || id.includes(idFilter)) &&
+                    (institucionFilter === "" || institucion.includes(institucionFilter));
+
+                row.style.display = match ? '' : 'none';
+            });
+        });
+    </script>
+
+
 </body>
 
 </html
